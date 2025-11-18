@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -O2
 TARGET = operating_systems
-SRC = main.c
+SRC = 21.c
 OBJ = $(SRC:.c=.o)
 
 all: $(TARGET)
