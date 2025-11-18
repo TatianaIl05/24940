@@ -26,16 +26,14 @@ int main(int argc, char *argv[]) {
         printf("PID=%ld (parent)\n", (long)getpid());
         
         wait(&wait_status);
-        if (WIFEXITED(status)) {
-            printf("Child exited with status: %d\n", WEXITSTATUS(status));
+        if (WIFEXITED(wait_status)) {
+            printf("Child exited with status: %d\n", WEXITSTATUS(wait_status));
         }
-        else if (WIFSIGNALED(status))
+        else if (WIFSIGNALED(wait_status))
         {
-            printf("Terminated by signal: %d\n", WTERMSIG(status));
+            printf("Terminated by signal: %d\n", WTERMSIG(wait_status));
         }
-        
 
-        printf("success\n");
     }
 
     return 0;
