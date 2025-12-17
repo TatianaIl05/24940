@@ -52,21 +52,28 @@ void wrap_line(void) {
 
     int word_start = pos;
     while (word_start > 0 && line[word_start-1] != ' ') word_start--;
-
+    
     if (word_start == 0) {
-        
-        write(STDOUT_FILENO, "\r\n", 2);
-        memmove(line, line + MAX_LINE, pos - MAX_LINE);
-        pos -= MAX_LINE;
-        line[pos] = '\0';
-        write(STDOUT_FILENO, line, pos);
-    } else {
-        write(STDOUT_FILENO, "\r\n", 2);
-        memmove(line, line + word_start, pos - word_start);
-        pos -= word_start;
-        line[pos] = '\0';
-        write(STDOUT_FILENO, line, pos);
+        word_start = MAX_LINE;
     }
+    
+    int word_len = pos - word_start;
+    char word_to_move[word_len + 1];
+    memcpy(word_to_move, &line[word_start], word_len);
+    word_to_move[word_len] = '\0';
+    
+    pos = word_start;
+    line[pos] = '\0';
+    
+    write(STDOUT_FILENO, "\r\033[K", 4);
+    write(STDOUT_FILENO, line, pos);
+    write(STDOUT_FILENO, "\r\n", 2);
+    
+    memcpy(line, word_to_move, word_len);
+    pos = word_len;
+    line[pos] = '\0';
+    
+    write(STDOUT_FILENO, line, pos);
 }
 
 int main(void) {
