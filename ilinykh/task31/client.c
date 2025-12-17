@@ -33,8 +33,11 @@ int main() {
     addr.sun_family = AF_UNIX;
     strncpy(addr.sun_path, SOCKET_PATH, sizeof(addr.sun_path)-1);
     
-    connect(sockfd, (struct sockaddr*)&addr, sizeof(addr));
-    
+    if (connect(sockfd, (struct sockaddr*)&addr, sizeof(addr)) == -1) {
+        perror("connect");
+        close(sockfd);
+        exit(EXIT_FAILURE);
+    }
     printf("Подключено. Набирайте текст (по символу):\n");
 
     set_raw_mode(1);
@@ -42,6 +45,7 @@ int main() {
     char c;
     while (read(STDIN_FILENO, &c, 1) > 0) {
         write(sockfd, &c, 1);
+        fflush(stdout);
         if (c == 4) break;  
     }
 
