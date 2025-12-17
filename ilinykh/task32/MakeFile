@@ -1,0 +1,16 @@
+CC = gcc
+CFLAGS = -Wall
+LDFLAGS = -lrt -lsocket -lnsl
+
+all: server client
+
+server: server.c
+	$(CC) $(CFLAGS) server.c -o server $(LDFLAGS)
+	chmod +x server
+
+client: client.c
+	$(CC) $(CFLAGS) client.c -o client $(LDFLAGS)
+	chmod +x client
+
+clean:
+	rm -f server client my_socket *.o
